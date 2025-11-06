@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Login - Chirpy</title>
+</head>
+<body>
+    <p>
+        <a href="/">Home</a> | 
+        <a href="/register/">Register</a> | 
+        <a href="/login/">Login</a> | 
+        <a href="/listusers/">List All Users</a>
+        <a href="/listcookies/">View Cookies</a>
+    </p>
+    
+    <h2>Login to Chirpy</h2>
+    <#if loginSuccess?? && loginSuccess>
+        <p>Welcome, ${username}! You are now logged in.</p>
+        <a href="/">Go to Home</a>
+    <#else>
+        <#if errorMsg??>
+            <p style="color:red;">${errorMsg}</p>
+        </#if>
+        <form method="POST" action="/login/">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="submit" value="Login">
+        </form>
+        <p>Don't have an account? <a href="/register/">Register here</a></p>
+    </#if>
+</body>
+</html>

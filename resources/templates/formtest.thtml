@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Chirpy Login</title>
+    </head>
+    <body>
+        <h1>A Really Ugly Login Form</h1>
+
+        <p>
+            Hello.
+            <#if username??>
+                Your username is: ${username}
+            <#else>
+                You have not entered a username.
+            </#if>
+        </p>
+
+        <p>
+            <form method="post" action="/formtest/">
+                <table border="1">
+                    <tr>
+                        <td>Username</td>
+                        <td><input type="text" name="username" /></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td><input type="password" name="password" /></td>
+                </table>
+                <input type="submit" value="Submit" />
+            </form>
+        </p>
+    </body>
+</html>
