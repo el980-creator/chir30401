@@ -8,10 +8,16 @@ package edu.georgetown;
 
 import com.sun.net.httpserver.HttpServer;
 import edu.georgetown.bll.user.UserService;
+import edu.georgetown.bll.ChirpService;
 import edu.georgetown.dl.DefaultPageHandler;
 import edu.georgetown.dl.DisplayLogic;
 import edu.georgetown.dl.ListCookiesHandler;
+import edu.georgetown.dl.LogoutHandler;
+import edu.georgetown.dl.PostChirpHandler;
+import edu.georgetown.dl.SearchHandler;
+import edu.georgetown.dl.SearchResultsHandler;
 import edu.georgetown.dl.TestFormHandler;
+import edu.georgetown.dl.TimelineHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.ConsoleHandler;
@@ -27,6 +33,7 @@ public class Chirpy {
     private Logger logger;
     private DisplayLogic displayLogic;
     private UserService userService;
+    private ChirpService chirpService;
 
     public Chirpy() {
         /* 
@@ -60,6 +67,7 @@ public class Chirpy {
             System.exit(1);
         }
         userService = new UserService(logger);
+        chirpService = new ChirpService(logger, userService);
         logger.info("Starting chirpy web service");
     }
 
@@ -75,6 +83,11 @@ public class Chirpy {
             // the service. The top-level path is "/", and that should be listed last.
             server.createContext("/formtest/", new TestFormHandler(logger, displayLogic));
             server.createContext("/listcookies/", new ListCookiesHandler(logger, displayLogic, userService));
+            server.createContext("/logout/", new LogoutHandler(logger, userService, displayLogic));
+            server.createContext("/post/", new PostChirpHandler(logger, userService, chirpService, displayLogic));
+            server.createContext("/timeline/", new TimelineHandler(logger, userService, chirpService, displayLogic));
+            server.createContext("/search/", new SearchHandler(logger, userService, chirpService, displayLogic));
+            server.createContext("/searchresults/", new SearchResultsHandler(logger, userService, chirpService, displayLogic));
             server.createContext("/listusers/", new edu.georgetown.dl.ListUsersHandler(logger, userService, displayLogic));
             server.createContext("/register/", new edu.georgetown.dl.RegisterHandler(logger, userService, displayLogic));
             server.createContext("/login/", new edu.georgetown.dl.LoginHandler(logger, userService, displayLogic));

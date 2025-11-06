@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results - Chirpy</title>
+    <style>
+        .search-results-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-summary {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .result-section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-count {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: normal;
+        }
+        
+        /* User Results */
+        .user-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            flex-grow: 1;
+        }
+        .user-username {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 16px;
+        }
+        .user-stats {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        .follow-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .follow-btn.follow {
+            background-color: #007bff;
+            color: white;
+        }
+        .follow-btn.unfollow {
+            background-color: #6c757d;
+            color: white;
+        }
+        .follow-btn:hover {
+            opacity: 0.8;
+        }
+        .view-profile-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            margin-left: 8px;
+        }
+        
+        /* Chirp Results */
+        .chirp-result {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .chirp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .chirp-author {
+            font-weight: bold;
+            color: #1da1f2;
+            font-size: 14px;
+        }
+        .chirp-timestamp {
+            font-size: 12px;
+            color: #657786;
+        }
+        .chirp-text {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .hashtag {
+            color: #1da1f2;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .hashtag:hover {
+            text-decoration: underline;
+        }
+        .chirp-hashtags {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        .chirp-hashtags a {
+            color: #1da1f2;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+        
+        /* Hashtag Results */
+        .hashtag-result {
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .hashtag-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1da1f2;
+            margin-bottom: 8px;
+        }
+        .hashtag-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        /* Empty States */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .no-results h3 {
+            color: #495057;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-summary {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .user-result {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .user-actions {
+                align-self: stretch;
+                display: flex;
+                gap: 8px;
+            }
+            .follow-btn, .view-profile-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Chirpy - Search Results</h1>
+    
+    <p>
+        <a href="/">Home</a> | 
+        <#if isLoggedIn>
+            <a href="/timeline/">Timeline</a> | 
+            <a href="/post/">Post Chirp</a> | 
+        </#if>
+        <a href="/search/">Search</a> | 
+        <#if isLoggedIn>
+            <a href="/logout/">Logout</a>
+        <#else>
+            <a href="/login/">Login</a> | 
+            <a href="/register/">Register</a>
+        </#if>
+    </p>
+
+    <div class="search-results-container">
+        <div class="search-header">
+            <h2>🔍 Search Results</h2>
+            <p>Results for: <strong>"${searchQuery}"</strong></p>
+            <p><em>Search type: ${searchType?capitalize}</em></p>
+        </div>
+
+        <div class="search-summary">
+            <div><strong>${totalResults}</strong> total results found</div>
+            <div>
+                👥 ${userResultCount} users | 
+                💬 ${chirpResultCount} chirps | 
+                # ${hashtagResultCount} hashtags
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/search/" class="btn btn-secondary">🔍 New Search</a>
+            <a href="/search/?q=${searchQuery?url}&type=all" class="btn btn-secondary">🔄 Search All</a>
+        </div>
+
+        <#if totalResults == 0>
+            <div class="no-results">
+                <h3>😔 No Results Found</h3>
+                <p>Sorry, we couldn't find anything matching "<strong>${searchQuery}</strong>".</p>
+                <div style="margin-top: 20px;">
+                    <a href="/search/" class="btn btn-primary">Try a different search</a>
+                    <#if isLoggedIn>
+                        <a href="/post/" class="btn btn-secondary">Post a chirp</a>
+                    </#if>
+                </div>
+            </div>
+        <#else>
+            
+            <!-- User Results -->
+            <#if userResults?? && userResults?size gt 0>
+                <div class="result-section">
+                    <h3 class="section-title">
+                        👥 Users 
+                        <span class="result-count">(${userResultCount} found)</span>
+                    </h3>
+                    <#list userResults as user>
+                        <div class="user-result">
+                            <div class="user-info">
+                                <div class="user-username">@${user.username}</div>
+                                <div class="user-stats">
+                                    Following: ${user.followingCount} | Followers: ${user.followersCount}
+                                </div>
+                            </div>
+                            <div class="user-actions">
+                                <#if isLoggedIn && user.username != currentUser>
+                                    <#if followingStatus[user.username]?? && followingStatus[user.username]>
+                                        <a href="/users/${user.username}/unfollow" class="follow-btn unfollow">✓ Following</a>
+                                    <#else>
+                                        <a href="/users/${user.username}/follow" class="follow-btn follow">+ Follow</a>
+                                    </#if>
+                                </#if>
+                                <a href="/searchresults/?q=@${user.username}&type=chirps" class="view-profile-btn">View Chirps</a>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+            </#if>
+
+            <!-- Hashtag Results -->
+            <#if hashtagResults?? && hashtagResults?size gt 0>
+                <div class="result-section">
+                    <h3 class="section-title">
+                        # Hashtags 
+                        <span class="result-count">(${hashtagResultCount} found)</span>
+                    </h3>
+                    <#list hashtagResults as hashtag>
+                        <div class="hashtag-result">
+                            <div class="hashtag-name">#${hashtag}</div>
+                            <a href="/searchresults/?q=%23${hashtag}&type=chirps" class="hashtag-link">
+                                View all chirps with #${hashtag}
+                            </a>
+                        </div>
+                    </#list>
+                </div>
+            </#if>
+
+            <!-- Chirp Results -->
+            <#if chirpResults?? && chirpResults?size gt 0>
+                <div class="result-section">
+                    <h3 class="section-title">
+                        💬 Chirps 
+                        <span class="result-count">(${chirpResultCount} found)</span>
+                    </h3>
+                    <#list chirpResults as chirp>
+                        <div class="chirp-result">
+                            <div class="chirp-header">
+                                <div class="chirp-author">@${chirp.author}</div>
+                                <div class="chirp-timestamp">${chirp.timestamp?string("MMM dd, yyyy 'at' HH:mm")}</div>
+                            </div>
+                            <div class="chirp-text">
+                                ${highlightHashtags.highlight(chirp.text)}
+                            </div>
+                            <#if chirp.extractHashtags()?size gt 0>
+                                <div class="chirp-hashtags">
+                                    <#list chirp.extractHashtags() as hashtag>
+                                        <a href="/searchresults/?q=%23${hashtag}&type=hashtags" class="hashtag">#${hashtag}</a>
+                                    </#list>
+                                </div>
+                            </#if>
+                        </div>
+                    </#list>
+                </div>
+            </#if>
+
+        </#if>
+
+        <div class="action-buttons" style="margin-top: 30px;">
+            <a href="/search/" class="btn btn-primary">🔍 Search Again</a>
+            <#if isLoggedIn>
+                <a href="/timeline/" class="btn btn-secondary">📰 Back to Timeline</a>
+            </#if>
+        </div>
+    </div>
+
+    <hr>
+    <p style="text-align: center; font-size: 12px; color: #666;">
+        <em>Chirpy - Your favorite micro-messaging platform</em>
+    </p>
+</body>
+</html>

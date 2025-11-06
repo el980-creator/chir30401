@@ -48,6 +48,21 @@ public class UserService {
             return sessionMap.get(token);
         }
 
+        /**
+         * Removes a session token from the session map (logout)
+         */
+        public boolean removeSession(String token) {
+            if (token == null) {
+                return false;
+            }
+            String username = sessionMap.remove(token);
+            if (username != null) {
+                logger.info("Removed session for user: " + username);
+                return true;
+            }
+            return false;
+        }
+
     public UserService(Logger log) {
         logger = log;
         logger.info("UserService started");
@@ -105,6 +120,126 @@ public class UserService {
             }
             Chirper user = users.get(username);
             return user.checkPassword(password);
+        }
+
+        /**
+         * Makes one user follow another user.
+         * @param followerUsername the username of the user who wants to follow
+         * @param followeeUsername the username of the user to be followed
+         * @return true if follow was successful, false otherwise
+         */
+        public boolean followUser(String followerUsername, String followeeUsername) {
+            if (followerUsername == null || followeeUsername == null) {
+                return false;
+            }
+            
+            if (followerUsername.equals(followeeUsername)) {
+                logger.warning("User " + followerUsername + " attempted to follow themselves");
+                return false;
+            }
+            
+            Chirper follower = users.get(followerUsername);
+            Chirper followee = users.get(followeeUsername);
+            
+            if (follower == null || followee == null) {
+                logger.warning("Follow attempt failed - one or both users don't exist: " + followerUsername + " -> " + followeeUsername);
+                return false;
+            }
+            
+            boolean success = follower.followUser(followee);
+            if (success) {
+                logger.info("User " + followerUsername + " is now following " + followeeUsername);
+            } else {
+                logger.info("User " + followerUsername + " is already following " + followeeUsername);
+            }
+            
+            return success;
+        }
+
+        /**
+         * Makes one user unfollow another user.
+         * @param followerUsername the username of the user who wants to unfollow
+         * @param followeeUsername the username of the user to be unfollowed
+         * @return true if unfollow was successful, false otherwise
+         */
+        public boolean unfollowUser(String followerUsername, String followeeUsername) {
+            if (followerUsername == null || followeeUsername == null) {
+                return false;
+            }
+            
+            Chirper follower = users.get(followerUsername);
+            Chirper followee = users.get(followeeUsername);
+            
+            if (follower == null || followee == null) {
+                logger.warning("Unfollow attempt failed - one or both users don't exist: " + followerUsername + " -> " + followeeUsername);
+                return false;
+            }
+            
+            boolean success = follower.unfollowUser(followee);
+            if (success) {
+                logger.info("User " + followerUsername + " unfollowed " + followeeUsername);
+            }
+            
+            return success;
+        }
+
+        /**
+         * Checks if one user is following another.
+         * @param followerUsername the username of the potential follower
+         * @param followeeUsername the username of the potential followee
+         * @return true if the first user is following the second, false otherwise
+         */
+        public boolean isUserFollowing(String followerUsername, String followeeUsername) {
+            if (followerUsername == null || followeeUsername == null) {
+                return false;
+            }
+            
+            Chirper follower = users.get(followerUsername);
+            Chirper followee = users.get(followeeUsername);
+            
+            if (follower == null || followee == null) {
+                return false;
+            }
+            
+            return follower.isFollowing(followee);
+        }
+
+        /**
+         * Gets the list of usernames that a user is following.
+         * @param username the username to get following list for
+         * @return vector of usernames being followed
+         */
+        public Vector<String> getFollowing(String username) {
+            Vector<String> followingUsernames = new Vector<>();
+            
+            Chirper user = users.get(username);
+            if (user != null) {
+                Vector<Chirper> following = user.getFollowing();
+                for (Chirper followedUser : following) {
+                    followingUsernames.add(followedUser.getUsername());
+                }
+            }
+            
+            return followingUsernames;
+        }
+
+        /**
+         * Gets the list of usernames that are following a user.
+         * @param username the username to get followers for
+         * @return vector of follower usernames
+         */
+        public Vector<String> getFollowers(String username) {
+            Vector<String> followerUsernames = new Vector<>();
+            
+            Chirper user = users.get(username);
+            if (user != null) {
+                Vector<Chirper> followers = user.getFollowers();
+                for (Chirper follower : followers) {
+                    followerUsernames.add(follower.getUsername());
+                }
+            }
+            
+            return followerUsernames;
         }
     // methods you'll probably want to add:
     //   registerUser

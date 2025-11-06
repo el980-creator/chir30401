@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timeline - Chirpy</title>
+    <style>
+        .timeline-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .user-header {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .chirp-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .chirp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .chirp-author {
+            font-weight: bold;
+            color: #1da1f2;
+            font-size: 16px;
+        }
+        .chirp-timestamp {
+            font-size: 12px;
+            color: #657786;
+        }
+        .chirp-text {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .hashtag {
+            color: #1da1f2;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .hashtag:hover {
+            text-decoration: underline;
+        }
+        .empty-timeline {
+            text-align: center;
+            padding: 40px;
+            color: #657786;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .sidebar h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .hashtag-list {
+            list-style: none;
+            padding: 0;
+        }
+        .hashtag-list li {
+            margin: 5px 0;
+        }
+        .refresh-notice {
+            background-color: #cfe2ff;
+            border: 1px solid #b6d4fe;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chirpy - Timeline</h1>
+    
+    <p>
+        <a href="/">Home</a> | 
+        <a href="/timeline/">Timeline</a> | 
+        <a href="/post/">Post Chirp</a> | 
+        <a href="/search/">Search</a> | 
+        <a href="/logout/">Logout</a>
+    </p>
+
+    <div class="timeline-container">
+        <div class="user-header">
+            <h2>Welcome back, ${currentUser}!</h2>
+            <p>Your personalized timeline</p>
+        </div>
+
+        <div class="stats-bar">
+            <div><strong>${userChirpCount}</strong><br>Your Chirps</div>
+            <div><strong>${chirpCount}</strong><br>Timeline Chirps</div>
+            <div><strong>${totalChirps}</strong><br>Total Chirps</div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/post/" class="btn btn-primary">✏️ Post New Chirp</a>
+            <a href="/search/" class="btn btn-secondary">🔍 Search</a>
+            <a href="/timeline/" class="btn btn-secondary">🔄 Refresh</a>
+        </div>
+
+        <#if popularHashtags?? && popularHashtags?size gt 0>
+            <div class="sidebar">
+                <h4>📈 Trending Hashtags</h4>
+                <ul class="hashtag-list">
+                    <#list popularHashtags as hashtag>
+                        <li><a href="/search/?q=%23${hashtag}" class="hashtag">#${hashtag}</a></li>
+                    </#list>
+                </ul>
+            </div>
+        </#if>
+
+        <div class="refresh-notice">
+            💡 <strong>Tip:</strong> This timeline shows your chirps and chirps from users you follow. 
+            To see chirps from other users, you'll need to follow them first!
+        </div>
+
+        <#if chirps?? && chirps?size gt 0>
+            <h3>📰 Latest Chirps</h3>
+            <#list chirps as chirp>
+                <div class="chirp-item">
+                    <div class="chirp-header">
+                        <div class="chirp-author">@${chirp.author}</div>
+                        <div class="chirp-timestamp">${chirp.timestamp?string("MMM dd, yyyy 'at' HH:mm")}</div>
+                    </div>
+                    <div class="chirp-text">
+                        ${highlightHashtags.highlight(chirp.text)}
+                    </div>
+                    <#if chirp.extractHashtags()?size gt 0>
+                        <div style="margin-top: 8px; font-size: 12px; color: #657786;">
+                            <#list chirp.extractHashtags() as hashtag>
+                                <a href="/search/?q=%23${hashtag}" class="hashtag" style="font-size: 12px;">#${hashtag}</a><#if hashtag_has_next> </#if>
+                            </#list>
+                        </div>
+                    </#if>
+                </div>
+            </#list>
+        <#else>
+            <div class="empty-timeline">
+                <h3>🌟 Your timeline is empty!</h3>
+                <p>You haven't posted any chirps yet, and you're not following anyone.</p>
+                <div style="margin-top: 20px;">
+                    <a href="/post/" class="btn btn-primary">Post your first chirp</a><br><br>
+                    <a href="/search/" class="btn btn-secondary">Find users to follow</a>
+                </div>
+            </div>
+        </#if>
+    </div>
+
+    <hr>
+    <p style="text-align: center; font-size: 12px; color: #666;">
+        <em>Chirpy - Your favorite micro-messaging platform</em>
+    </p>
+</body>
+</html>

@@ -10,7 +10,8 @@
         <a href="/">Home</a> | 
         <a href="/register/">Register</a> | 
         <a href="/login/">Login</a> | 
-        <a href="/listusers/">List All Users</a>
+        <a href="/search/">Search</a> | 
+        <a href="/listusers/">List All Users</a> |
         <a href="/listcookies/">View Cookies</a>
     </p>
 
@@ -24,6 +25,7 @@
     <ul>
         <li><a href="/register/">Create an account</a></li>
         <li><a href="/login/">Login to your account</a></li>
+        <li><a href="/search/">Search users and chirps</a></li>
         <li><a href="/listusers/">See all registered users</a></li>
     </ul>
 

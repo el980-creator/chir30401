@@ -1,22 +1,84 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>List of Chirpy Users</title>
+    <style>
+        .user-list {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .user-item {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-name {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .user-actions a {
+            color: #28a745;
+            text-decoration: none;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .stats {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
+    <h1>Chirpy - All Users</h1>
+    
     <p>
         <a href="/">Home</a> | 
         <a href="/register/">Register</a> | 
         <a href="/login/">Login</a> | 
-        <a href="/listusers/">List All Users</a>
+        <a href="/search/">Search</a> | 
+        <a href="/listusers/">List All Users</a> |
         <a href="/listcookies/">View Cookies</a>
     </p>
     
-    <h2>Registered Users</h2>
-    <ul>
-        <#list usernames as username>
-            <li>${username}</li>
-        </#list>
-    </ul>
-    <a href="/">Back to Home</a>
+    <div class="user-list">
+        <div class="stats">
+            <h3>📊 User Statistics</h3>
+            <p><strong>${usernames?size}</strong> registered users in Chirpy</p>
+        </div>
+        
+        <h2>👥 All Registered Users</h2>
+        <#if usernames?? && usernames?size gt 0>
+            <#list usernames as username>
+                <div class="user-item">
+                    <div class="user-name">@${username}</div>
+                    <div class="user-actions">
+                        <a href="/searchresults/?q=@${username}&type=users">View Profile</a>
+                        <a href="/searchresults/?q=@${username}&type=chirps">View Chirps</a>
+                    </div>
+                </div>
+            </#list>
+        <#else>
+            <p style="text-align: center; color: #6c757d;">No users registered yet.</p>
+        </#if>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">← Back to Home</a>
+            <a href="/register/" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px;">Join Chirpy</a>
+        </div>
+    </div>
+
+    <hr>
+    <p style="text-align: center; font-size: 12px; color: #666;">
+        <em>Chirpy - Your favorite micro-messaging platform</em>
+    </p>
 </body>
 </html>

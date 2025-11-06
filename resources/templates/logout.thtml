@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logout - Chirpy</title>
+    <meta http-equiv="refresh" content="3;url=/">
+</head>
+<body>
+    <h1>Chirpy - Logout</h1>
+    
+    <p>
+        <a href="/">Home</a> | 
+        <a href="/register/">Register</a> | 
+        <a href="/login/">Login</a> | 
+        <a href="/listusers/">List All Users</a> |
+        <a href="/listcookies/">View Cookies</a>
+    </p>
+
+    <h2>Logout</h2>
+    
+    <#if logoutPerformed?? && logoutPerformed>
+        <#if wasLoggedIn?? && wasLoggedIn>
+            <p style="color: green;">
+                <strong>Goodbye, ${username}!</strong><br>
+                You have been successfully logged out.
+            </p>
+        <#else>
+            <p style="color: orange;">
+                <strong>You were not logged in.</strong><br>
+                No active session found.
+            </p>
+        </#if>
+        
+        <p>You will be automatically redirected to the home page in 3 seconds.</p>
+        <p>If you are not redirected, <a href="/">click here</a>.</p>
+    <#else>
+        <#if wasLoggedIn?? && wasLoggedIn>
+            <p>You are currently logged in as <strong>${username}</strong>.</p>
+            <p>Are you sure you want to log out?</p>
+            
+            <form method="POST" action="/logout/">
+                <input type="submit" value="Yes, Log Me Out" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; cursor: pointer;">
+            </form>
+            
+            <p><a href="/">Cancel and return to home</a></p>
+        <#else>
+            <p style="color: orange;">You are not currently logged in.</p>
+            <p><a href="/login/">Click here to log in</a></p>
+            <p><a href="/">Return to home page</a></p>
+        </#if>
+    </#if>
+
+    <hr>
+    <p style="font-size: 12px; color: #666;">
+        <em>Chirpy - Your favorite micro-messaging platform</em>
+    </p>
+</body>
+</html>

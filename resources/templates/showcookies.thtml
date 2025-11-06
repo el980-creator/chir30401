@@ -3,13 +3,22 @@
     <title>Chirpy - Session Information</title>
 </head>
 <body>
-    <p>
+    <nav>
         <a href="/">Home</a> | 
-        <a href="/register/">Register</a> | 
-        <a href="/login/">Login</a> | 
-        <a href="/listusers/">List All Users</a> |
-        <a href="/listcookies/">View Cookies</a>
-    </p>
+        <#if loggedInUser??>
+            <a href="/timeline/">Timeline</a> | 
+            <a href="/post/">Post Chirp</a> | 
+            <a href="/search/">Search</a> | 
+            <a href="/listusers/">Users</a> | 
+            <a href="/listcookies/">Cookies</a> | 
+            <a href="/logout/">Logout</a>
+        <#else>
+            <a href="/register/">Register</a> | 
+            <a href="/login/">Login</a> | 
+            <a href="/listusers/">Users</a> | 
+            <a href="/listcookies/">Cookies</a>
+        </#if>
+    </nav>
     
     <h1>Current Session Information</h1>
     
@@ -40,6 +49,17 @@
         not your actual username. This makes the session more secure and prevents cookie tampering.
     </p>
     
-    <p><a href="/">Back to Home</a></p>
+    <div style="margin-top: 20px;">
+        <#if loggedInUser??>
+            <a href="/timeline/">View Timeline</a> | 
+            <a href="/post/">Post New Chirp</a> | 
+            <a href="/search/">Search Chirps</a> | 
+            <a href="/">Home</a>
+        <#else>
+            <a href="/login/">Login</a> | 
+            <a href="/register/">Register</a> | 
+            <a href="/">Home</a>
+        </#if>
+    </div>
 </body>
 </html>

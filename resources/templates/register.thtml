@@ -7,14 +7,20 @@
         <a href="/">Home</a> | 
         <a href="/register/">Register</a> | 
         <a href="/login/">Login</a> | 
-        <a href="/listusers/">List All Users</a>
+        <a href="/search/">Search</a> | 
+        <a href="/listusers/">List All Users</a> |
         <a href="/listcookies/">View Cookies</a>
     </p>
     
     <h2>Register for Chirpy</h2>
     <#if registerSuccess?? && registerSuccess>
         <p>Registration successful! Welcome, ${username}.</p>
-        <a href="/login/">Go to Login</a>
+        <p>What would you like to do next?</p>
+        <ul>
+            <li><a href="/login/">Log in to your account</a></li>
+            <li><a href="/search/">Explore users and chirps</a></li>
+            <li><a href="/listusers/">See all users</a></li>
+        </ul>
     <#else>
         <#if errorMsg??>
             <p style="color:red;">${errorMsg}</p>

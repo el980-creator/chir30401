@@ -159,4 +159,34 @@ public class DisplayLogic {
         }
         return cookies;
     }
+
+    /**
+     * Gets the value of a specific cookie from the request.
+     * 
+     * @param exchange the HttpExchange object representing the current exchange
+     * @param cookieName the name of the cookie to retrieve
+     * @return the value of the cookie, or null if the cookie is not set
+     */
+    public String getCookieValue(HttpExchange exchange, String cookieName) {
+        Map<String, String> cookies = getCookies(exchange);
+        return cookies.get(cookieName);
+    }
+
+    /**
+     * Removes a cookie by setting it to expire.
+     * 
+     * @param exchange the HttpExchange object representing the current exchange
+     * @param cookieName the name of the cookie to remove
+     * @return true if the cookie removal was set successfully
+     */
+    public boolean removeCookie(HttpExchange exchange, String cookieName) {
+        try {
+            exchange.getResponseHeaders().add("Set-Cookie",
+                    cookieName + "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            return true;
+        } catch (Exception e) {
+            logger.warning("Exception removing cookie: " + e.getMessage());
+            return false;
+        }
+    }
 }

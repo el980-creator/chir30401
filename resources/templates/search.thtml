@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search - Chirpy</title>
+    <style>
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .search-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .search-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .search-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        .search-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        .search-option label {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .search-option input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .search-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        .suggestions-section {
+            margin-bottom: 30px;
+        }
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .suggestion-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .suggestion-card h4 {
+            margin-top: 0;
+            color: #495057;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+        .suggestion-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+        }
+        .suggestion-list li {
+            margin: 8px 0;
+        }
+        .suggestion-list a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .suggestion-list a:hover {
+            background-color: #e7f3ff;
+            text-decoration: underline;
+        }
+        .hashtag-link {
+            color: #1da1f2;
+            font-weight: bold;
+        }
+        .user-link {
+            color: #007bff;
+        }
+        .stats-bar {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            margin: 5px;
+        }
+        .search-tips {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .search-tips h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .search-tips ul {
+            margin-bottom: 0;
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .search-options {
+                flex-direction: column;
+            }
+            .search-option {
+                min-width: auto;
+            }
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        function setSearchType(type, query) {
+            document.getElementById('searchQuery').value = query;
+            document.querySelector('input[value="' + type + '"]').checked = true;
+            document.getElementById('searchForm').submit();
+        }
+
+        function quickSearch(query, type) {
+            const form = document.getElementById('searchForm');
+            document.getElementById('searchQuery').value = query;
+            document.querySelector('input[value="' + type + '"]').checked = true;
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>Chirpy - Search</h1>
+    
+    <p>
+        <a href="/">Home</a> | 
+        <#if isLoggedIn>
+            <a href="/timeline/">Timeline</a> | 
+            <a href="/post/">Post Chirp</a> | 
+        </#if>
+        <a href="/search/">Search</a> | 
+        <#if isLoggedIn>
+            <a href="/logout/">Logout</a>
+        <#else>
+            <a href="/login/">Login</a> | 
+            <a href="/register/">Register</a>
+        </#if>
+    </p>
+
+    <div class="search-container">
+        <#if isLoggedIn>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>🔍 Search Chirpy</h2>
+                <p>Welcome back, <strong>${currentUser}</strong>! What are you looking for?</p>
+            </div>
+        <#else>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>🔍 Search Chirpy</h2>
+                <p>Discover users, chirps, and trending topics!</p>
+            </div>
+        </#if>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <strong>${userCount}</strong><br>
+                <small>Total Users</small>
+            </div>
+            <div class="stat-item">
+                <strong>${totalChirps}</strong><br>
+                <small>Total Chirps</small>
+            </div>
+            <div class="stat-item">
+                <strong>${popularHashtags?size}</strong><br>
+                <small>Active Hashtags</small>
+            </div>
+        </div>
+
+        <form id="searchForm" method="POST" action="/search/" class="search-form">
+            <input 
+                type="text" 
+                id="searchQuery"
+                name="searchQuery" 
+                class="search-input" 
+                placeholder="Search for users, hashtags, or chirp content..." 
+                value="${searchQuery!""}"
+                required>
+            
+            <div class="search-options">
+                <div class="search-option">
+                    <input type="radio" id="searchAll" name="searchType" value="all" <#if searchType == "all" || !searchType??>checked</#if>>
+                    <label for="searchAll">🔍 Everything</label>
+                </div>
+                <div class="search-option">
+                    <input type="radio" id="searchUsers" name="searchType" value="users" <#if searchType == "users">checked</#if>>
+                    <label for="searchUsers">👤 Users</label>
+                </div>
+                <div class="search-option">
+                    <input type="radio" id="searchHashtags" name="searchType" value="hashtags" <#if searchType == "hashtags">checked</#if>>
+                    <label for="searchHashtags"># Hashtags</label>
+                </div>
+                <div class="search-option">
+                    <input type="radio" id="searchChirps" name="searchType" value="chirps" <#if searchType == "chirps">checked</#if>>
+                    <label for="searchChirps">💬 Chirps</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="search-btn">🔍 Search</button>
+        </form>
+
+        <div class="suggestions-section">
+            <h3>💡 Suggestions</h3>
+            <div class="suggestions-grid">
+                <#if popularHashtags?? && popularHashtags?size gt 0>
+                    <div class="suggestion-card">
+                        <h4>📈 Trending Hashtags</h4>
+                        <ul class="suggestion-list">
+                            <#list popularHashtags as hashtag>
+                                <li>
+                                    <a href="javascript:quickSearch('#${hashtag}', 'hashtags')" class="hashtag-link">
+                                        #${hashtag}
+                                    </a>
+                                </li>
+                            </#list>
+                        </ul>
+                    </div>
+                </#if>
+
+                <#if allUsers?? && allUsers?size gt 0>
+                    <div class="suggestion-card">
+                        <h4>👥 Users to Discover</h4>
+                        <ul class="suggestion-list">
+                            <#list allUsers as username>
+                                <#if username_index lt 8>
+                                    <li>
+                                        <a href="javascript:quickSearch('@${username}', 'users')" class="user-link">
+                                            @${username}
+                                        </a>
+                                    </li>
+                                </#if>
+                            </#list>
+                            <#if allUsers?size gt 8>
+                                <li><em>...and ${allUsers?size - 8} more users</em></li>
+                            </#if>
+                        </ul>
+                    </div>
+                </#if>
+            </div>
+        </div>
+
+        <div class="search-tips">
+            <h4>🎯 Search Tips</h4>
+            <ul>
+                <li><strong>Users:</strong> Search by username (e.g., "john" or "@john")</li>
+                <li><strong>Hashtags:</strong> Search with or without # (e.g., "Georgetown" or "#Georgetown")</li>
+                <li><strong>Chirps:</strong> Search by content, words, or phrases</li>
+                <li><strong>Everything:</strong> Searches across all categories simultaneously</li>
+                <li><strong>Case insensitive:</strong> Search works regardless of capitalization</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+    <p style="text-align: center; font-size: 12px; color: #666;">
+        <em>Chirpy - Your favorite micro-messaging platform</em>
+    </p>
+</body>
+</html>
