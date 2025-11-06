@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>${title!"Timeline"}</title>
+  </head>
+  <body>
+    <h1>${title!"Timeline"}</h1>
+    <p><a href="/post/">Post a chirp</a> | <a href="/search/">Search</a> | <a href="/listusers/">Users</a> | <a href="/">Home</a></p>
+
+    <#if chirps?size == 0>
+      <p>No chirps to display.</p>
+    <#else>
+      <ul>
+        <#list chirps as c>
+          <li>
+            <strong>${c.author}</strong>: ${c.text} <em>(${c.timestamp})</em>
+          </li>
+        </#list>
+      </ul>
+    </#if>
+  </body>
+</html>

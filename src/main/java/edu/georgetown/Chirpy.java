@@ -12,6 +12,11 @@ import edu.georgetown.dl.DefaultPageHandler;
 import edu.georgetown.dl.DisplayLogic;
 import edu.georgetown.dl.ListCookiesHandler;
 import edu.georgetown.dl.TestFormHandler;
+import edu.georgetown.dl.PostChirpHandler;
+import edu.georgetown.dl.UserTimelineHandler;
+import edu.georgetown.dl.HashtagHandler;
+import edu.georgetown.dl.SearchHandler;
+import edu.georgetown.bll.ChirpService;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.ConsoleHandler;
@@ -27,6 +32,7 @@ public class Chirpy {
     private Logger logger;
     private DisplayLogic displayLogic;
     private UserService userService;
+    private ChirpService chirpService;
 
     public Chirpy() {
         /* 
@@ -60,6 +66,7 @@ public class Chirpy {
             System.exit(1);
         }
         userService = new UserService(logger);
+        chirpService = new ChirpService();
         logger.info("Starting chirpy web service");
     }
 
@@ -80,6 +87,10 @@ public class Chirpy {
             server.createContext("/login/", new edu.georgetown.dl.LoginHandler(logger, userService, displayLogic));
             server.createContext("/logout/", new edu.georgetown.dl.LogoutHandler(logger, userService, displayLogic));
             server.createContext("/follow/", new edu.georgetown.dl.FollowHandler(logger, userService, displayLogic));
+            server.createContext("/post/", new PostChirpHandler(logger, userService, chirpService, displayLogic));
+            server.createContext("/userTimeline/", new UserTimelineHandler(logger, chirpService, displayLogic));
+            server.createContext("/hashtag/", new HashtagHandler(logger, chirpService, displayLogic));
+            server.createContext("/search/", new SearchHandler(logger, displayLogic));
             server.createContext("/", new DefaultPageHandler(logger, displayLogic));
             // you will need to add to the above list to add new functionality to the web
             // service.  Just make sure that the handler for "/" is listed last.
