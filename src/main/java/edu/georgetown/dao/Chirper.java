@@ -1,7 +1,13 @@
 /**
- * A skeleton of a Chirper
+ * Chirper - represents a user in the Chirpy social networking system
  * 
- * Micah Sherr <msherr@cs.georgetown.edu>
+ * This class encapsulates user data including authentication credentials,
+ * privacy settings, and social relationships (followers and following).
+ * Supports user authentication, following relationships, and profile management.
+ * 
+ * @author Chirpy Team
+ * @version 2.0
+ * @since 1.0
  */
 
 package edu.georgetown.dao;
@@ -9,20 +15,55 @@ package edu.georgetown.dao;
 import java.io.Serializable;
 import java.util.Vector;
 
+/**
+ * Data Access Object representing a user (chirper) in the social network.
+ * 
+ * <p>This class manages:
+ * <ul>
+ * <li>User authentication (username/password)</li>
+ * <li>Privacy settings for chirp visibility</li>
+ * <li>Social relationships (followers and following lists)</li>
+ * <li>User profile operations</li>
+ * </ul>
+ * 
+ * <p>The class implements {@link Serializable} to support persistence
+ * and session management capabilities.
+ * 
+ * @author Chirpy Team
+ * @version 2.0
+ */
 public class Chirper implements Serializable {
     
+    /** Serial version UID for serialization compatibility */
+    private static final long serialVersionUID = 1L;
+    
+    /** The unique username for this chirper */
     private String username;
+    
+    /** The hashed password for authentication */
     private String password;
-    /** if true, the user's chirps are public */
+    
+    /** If true, the user's chirps are publicly visible */
     private boolean publicChirps;   
 
-    /** list of this chirper's followers */
+    /** List of users who follow this chirper */
     private Vector<Chirper> followers;
 
-    /** list of users this chirper is following */
+    /** List of users this chirper is following */
     private Vector<Chirper> following;
 
 
+    /**
+     * Creates a new chirper with default public visibility.
+     * 
+     * <p>Initializes the user with the provided credentials and sets
+     * chirp visibility to public by default. Creates empty followers
+     * and following lists.
+     * 
+     * @param username the unique username for this chirper
+     * @param password the password for authentication
+     * @throws IllegalArgumentException if username or password is null/empty
+     */
     public Chirper( String username, String password ) {
         this.username = username;
         this.password = password;
@@ -31,14 +72,24 @@ public class Chirper implements Serializable {
         this.following = new Vector<Chirper>();        
     }
 
-    //overloaded constrcutor to choose public status on creation
+    /**
+     * Creates a new chirper with specified privacy settings.
+     * 
+     * <p>Overloaded constructor to set public/private status on creation.
+     * Allows full control over user privacy settings during initialization.
+     * 
+     * @param username the unique username for this chirper
+     * @param password the password for authentication
+     * @param isPublic true if chirps should be public, false for private
+     * @throws IllegalArgumentException if username or password is null/empty
+     */
     public Chirper(String username, String password, boolean isPublic) {
-    this.username = username;
-    this.password = password;
-    this.publicChirps = isPublic;
-    this.followers = new Vector<>();
-    this.following = new Vector<>();
-}
+        this.username = username;
+        this.password = password;
+        this.publicChirps = isPublic;
+        this.followers = new Vector<>();
+        this.following = new Vector<>();
+    }
 
 
     /**

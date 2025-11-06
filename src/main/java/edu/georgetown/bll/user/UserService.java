@@ -6,6 +6,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import edu.georgetown.dao.*;
+import edu.georgetown.bll.PersistenceService;
 import java.util.HashMap;
 
 public class UserService {
@@ -15,8 +16,11 @@ public class UserService {
     private Map<String, Chirper> users; // = new HashMap<>(); 
     //just did here for easier view
 
-        // Session management: token -> username
-        private Map<String, String> sessionMap = new HashMap<>();
+    // Session management: token -> username
+    private Map<String, String> sessionMap = new HashMap<>();
+    
+    // Persistence service for saving/loading data
+    private PersistenceService persistenceService;
 
         /**
          * Generates a secure random session token
@@ -66,7 +70,8 @@ public class UserService {
     public UserService(Logger log) {
         logger = log;
         logger.info("UserService started");
-        this.users = new HashMap<>(); 
+        this.persistenceService = new PersistenceService();
+        this.users = loadUsersFromPersistence();
     }
 
     //params username and password
@@ -78,6 +83,10 @@ public class UserService {
         }
         Chirper created = new Chirper(username, password);
         users.put(username, created);
+        
+        // Save users to persistence
+        saveUsersToPersistence();
+        
         return true;
 
     }
@@ -149,6 +158,8 @@ public class UserService {
             boolean success = follower.followUser(followee);
             if (success) {
                 logger.info("User " + followerUsername + " is now following " + followeeUsername);
+                // Save users to persistence after follow relationship change
+                saveUsersToPersistence();
             } else {
                 logger.info("User " + followerUsername + " is already following " + followeeUsername);
             }
@@ -178,6 +189,8 @@ public class UserService {
             boolean success = follower.unfollowUser(followee);
             if (success) {
                 logger.info("User " + followerUsername + " unfollowed " + followeeUsername);
+                // Save users to persistence after unfollow relationship change
+                saveUsersToPersistence();
             }
             
             return success;
@@ -240,6 +253,32 @@ public class UserService {
             }
             
             return followerUsernames;
+        }
+        
+        /**
+         * Load users from persistent storage.
+         * @return HashMap of users, empty if file doesn't exist
+         */
+        private HashMap<String, Chirper> loadUsersFromPersistence() {
+            HashMap<String, Chirper> loadedUsers = persistenceService.loadUsers();
+            logger.info("Loaded " + loadedUsers.size() + " users from persistence");
+            return loadedUsers;
+        }
+        
+        /**
+         * Save current users to persistent storage.
+         */
+        private void saveUsersToPersistence() {
+            try {
+                boolean success = persistenceService.saveUsers((HashMap<String, Chirper>) users);
+                if (success) {
+                    logger.fine("Users saved to persistence successfully");
+                } else {
+                    logger.warning("Failed to save users to persistence");
+                }
+            } catch (Exception e) {
+                logger.severe("Error saving users to persistence: " + e.getMessage());
+            }
         }
     // methods you'll probably want to add:
     //   registerUser

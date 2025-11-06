@@ -25,6 +25,9 @@ public class ChirpService {
     /** Storage for all chirps in the system */
     private List<Chirp> allChirps;
     
+    /** Persistence service for saving/loading chirps */
+    private PersistenceService persistenceService;
+    
     /**
      * Constructor for ChirpService.
      * 
@@ -34,8 +37,9 @@ public class ChirpService {
     public ChirpService(Logger logger, UserService userService) {
         ChirpService.logger = logger;
         this.userService = userService;
-        this.allChirps = new ArrayList<>();
-        logger.info("ChirpService started");
+        this.persistenceService = new PersistenceService();
+        this.allChirps = loadChirpsFromPersistence();
+        logger.info("ChirpService started with " + allChirps.size() + " chirps loaded");
     }
 
     /**
@@ -67,6 +71,9 @@ public class ChirpService {
         try {
             Chirp newChirp = new Chirp(authorUsername, text.trim());
             allChirps.add(newChirp);
+            
+            // Save chirps to persistence
+            saveChirpsToPersistence();
             
             logger.info("Created new chirp by " + authorUsername + " with " + 
                        newChirp.extractHashtags().size() + " hashtags");
@@ -262,8 +269,36 @@ public class ChirpService {
         boolean removed = allChirps.remove(chirp);
         if (removed) {
             logger.info("Removed chirp by " + chirp.getAuthor());
+            // Save chirps to persistence after removal
+            saveChirpsToPersistence();
         }
         
         return removed;
+    }
+    
+    /**
+     * Load chirps from persistent storage.
+     * @return ArrayList of chirps, empty if file doesn't exist
+     */
+    private ArrayList<Chirp> loadChirpsFromPersistence() {
+        ArrayList<Chirp> loadedChirps = persistenceService.loadChirps();
+        logger.info("Loaded " + loadedChirps.size() + " chirps from persistence");
+        return loadedChirps;
+    }
+    
+    /**
+     * Save current chirps to persistent storage.
+     */
+    private void saveChirpsToPersistence() {
+        try {
+            boolean success = persistenceService.saveChirps((ArrayList<Chirp>) allChirps);
+            if (success) {
+                logger.fine("Chirps saved to persistence successfully");
+            } else {
+                logger.warning("Failed to save chirps to persistence");
+            }
+        } catch (Exception e) {
+            logger.severe("Error saving chirps to persistence: " + e.getMessage());
+        }
     }
 }
