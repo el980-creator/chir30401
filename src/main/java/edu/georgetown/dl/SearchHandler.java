@@ -121,14 +121,28 @@ public class SearchHandler implements HttpHandler {
 
         // Render template
         StringWriter sw = new StringWriter();
-        displayLogic.parseTemplate(SEARCH_PAGE, dataModel, sw);
-        
-        // Send response
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, sw.getBuffer().length());
-        
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(sw.toString().getBytes());
+        try {
+            displayLogic.parseTemplate(SEARCH_PAGE, dataModel, sw);
+            
+            // Send response
+            exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+            byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, responseBytes.length);
+            
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBytes);
+            }
+        } catch (Exception e) {
+            logger.severe("Error rendering search template: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Send error response
+            String errorMsg = "Internal Server Error: " + e.getMessage();
+            exchange.getResponseHeaders().set("Content-Type", "text/plain");
+            exchange.sendResponseHeaders(500, errorMsg.length());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(errorMsg.getBytes());
+            }
         }
     }
 

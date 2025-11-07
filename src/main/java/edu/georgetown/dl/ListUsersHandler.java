@@ -6,6 +6,7 @@ import edu.georgetown.bll.user.UserService;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -37,14 +38,28 @@ public class ListUsersHandler implements HttpHandler {
 
         //hold data for html
         StringWriter sw = new StringWriter();
-        displayLogic.parseTemplate(LIST_USERS_PAGE, dataModel, sw);
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        
-        exchange.sendResponseHeaders(200, sw.getBuffer().length());
+        try {
+            displayLogic.parseTemplate(LIST_USERS_PAGE, dataModel, sw);
+            exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+            
+            byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, responseBytes.length);
 
-        //write to html
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(sw.toString().getBytes());
+            //write to html
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBytes);
+            }
+        } catch (Exception e) {
+            logger.severe("Error rendering listusers template: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Send error response
+            String errorMsg = "Internal Server Error: " + e.getMessage();
+            exchange.getResponseHeaders().set("Content-Type", "text/plain");
+            exchange.sendResponseHeaders(500, errorMsg.length());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(errorMsg.getBytes());
+            }
         }
     }
 }

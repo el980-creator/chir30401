@@ -3,6 +3,7 @@ package edu.georgetown.dl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class TestFormHandler implements HttpHandler {
         displayLogic.parseTemplate(FORM_PAGE, dataModel, sw);
 
         // set the type of content (in this case, we're sending back HTML)
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
+        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
         
         // if we have a username, set a cookie with the username.
         if (dataFromWebForm.containsKey("username")) {
@@ -49,11 +50,12 @@ public class TestFormHandler implements HttpHandler {
         }
 
         // send the HTTP headers
-        exchange.sendResponseHeaders(200, (sw.getBuffer().length()));
+        byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, responseBytes.length);
 
         // finally, write the actual response (the contents of the template)
         OutputStream os = exchange.getResponseBody();
-        os.write(sw.toString().getBytes());
+        os.write(responseBytes);
         os.close();
     }
 }

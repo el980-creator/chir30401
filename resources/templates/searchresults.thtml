@@ -250,7 +250,7 @@
 
     <div class="search-results-container">
         <div class="search-header">
-            <h2>🔍 Search Results</h2>
+            <h2>Search Results</h2>
             <p>Results for: <strong>"${searchQuery}"</strong></p>
             <p><em>Search type: ${searchType?capitalize}</em></p>
         </div>
@@ -258,20 +258,20 @@
         <div class="search-summary">
             <div><strong>${totalResults}</strong> total results found</div>
             <div>
-                👥 ${userResultCount} users | 
-                💬 ${chirpResultCount} chirps | 
-                # ${hashtagResultCount} hashtags
+                ${userResultCount} users | 
+                ${chirpResultCount} chirps | 
+                ${hashtagResultCount} hashtags
             </div>
         </div>
 
         <div class="action-buttons">
-            <a href="/search/" class="btn btn-secondary">🔍 New Search</a>
-            <a href="/search/?q=${searchQuery?url}&type=all" class="btn btn-secondary">🔄 Search All</a>
+            <a href="/search/" class="btn btn-secondary">New Search</a>
+            <a href="/search/?q=${searchQuery?url}&type=all" class="btn btn-secondary">Search All</a>
         </div>
 
         <#if totalResults == 0>
             <div class="no-results">
-                <h3>😔 No Results Found</h3>
+                <h3>No Results Found</h3>
                 <p>Sorry, we couldn't find anything matching "<strong>${searchQuery}</strong>".</p>
                 <div style="margin-top: 20px;">
                     <a href="/search/" class="btn btn-primary">Try a different search</a>
@@ -286,7 +286,7 @@
             <#if userResults?? && userResults?size gt 0>
                 <div class="result-section">
                     <h3 class="section-title">
-                        👥 Users 
+                        Users 
                         <span class="result-count">(${userResultCount} found)</span>
                     </h3>
                     <#list userResults as user>
@@ -334,7 +334,7 @@
             <#if chirpResults?? && chirpResults?size gt 0>
                 <div class="result-section">
                     <h3 class="section-title">
-                        💬 Chirps 
+                        Chirps 
                         <span class="result-count">(${chirpResultCount} found)</span>
                     </h3>
                     <#list chirpResults as chirp>
@@ -361,9 +361,9 @@
         </#if>
 
         <div class="action-buttons" style="margin-top: 30px;">
-            <a href="/search/" class="btn btn-primary">🔍 Search Again</a>
+            <a href="/search/" class="btn btn-primary">Search Again</a>
             <#if isLoggedIn>
-                <a href="/timeline/" class="btn btn-secondary">📰 Back to Timeline</a>
+                <a href="/timeline/" class="btn btn-secondary">Back to Timeline</a>
             </#if>
         </div>
     </div>

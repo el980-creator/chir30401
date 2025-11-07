@@ -61,10 +61,11 @@ public class RegisterHandler implements HttpHandler {
         dataModel.put("username", username);
         StringWriter sw = new StringWriter();
         displayLogic.parseTemplate(REGISTER_PAGE, dataModel, sw);
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, sw.getBuffer().length());
+        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+        byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, responseBytes.length);
         OutputStream os = exchange.getResponseBody();
-        os.write(sw.toString().getBytes());
+        os.write(responseBytes);
         os.close();
     }
 

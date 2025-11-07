@@ -14,6 +14,7 @@ import edu.georgetown.dao.Chirp;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -101,11 +102,12 @@ public class TimelineHandler implements HttpHandler {
         displayLogic.parseTemplate(TIMELINE_PAGE, dataModel, sw);
         
         // Send response
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, sw.getBuffer().length());
+        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+        byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, responseBytes.length);
         
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(sw.toString().getBytes());
+            os.write(responseBytes);
         }
     }
 

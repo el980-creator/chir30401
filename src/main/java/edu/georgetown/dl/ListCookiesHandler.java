@@ -3,6 +3,7 @@ package edu.georgetown.dl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -50,11 +51,12 @@ public class ListCookiesHandler implements HttpHandler {
         displayLogic.parseTemplate(COOKIELIST_PAGE, dataModel, sw);
 
         // set html
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, (sw.getBuffer().length()));
+        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+        byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, responseBytes.length);
 
         OutputStream os = exchange.getResponseBody();
-        os.write(sw.toString().getBytes());
+        os.write(responseBytes);
         os.close();
     }
 }

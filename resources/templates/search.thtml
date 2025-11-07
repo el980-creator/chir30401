@@ -192,12 +192,12 @@
     <div class="search-container">
         <#if isLoggedIn>
             <div style="text-align: center; margin-bottom: 20px;">
-                <h2>🔍 Search Chirpy</h2>
+                <h2>Search Chirpy</h2>
                 <p>Welcome back, <strong>${currentUser}</strong>! What are you looking for?</p>
             </div>
         <#else>
             <div style="text-align: center; margin-bottom: 20px;">
-                <h2>🔍 Search Chirpy</h2>
+                <h2>Search Chirpy</h2>
                 <p>Discover users, chirps, and trending topics!</p>
             </div>
         </#if>
@@ -230,11 +230,11 @@
             <div class="search-options">
                 <div class="search-option">
                     <input type="radio" id="searchAll" name="searchType" value="all" <#if searchType == "all" || !searchType??>checked</#if>>
-                    <label for="searchAll">🔍 Everything</label>
+                    <label for="searchAll">Everything</label>
                 </div>
                 <div class="search-option">
                     <input type="radio" id="searchUsers" name="searchType" value="users" <#if searchType == "users">checked</#if>>
-                    <label for="searchUsers">👤 Users</label>
+                    <label for="searchUsers">Users</label>
                 </div>
                 <div class="search-option">
                     <input type="radio" id="searchHashtags" name="searchType" value="hashtags" <#if searchType == "hashtags">checked</#if>>
@@ -242,19 +242,19 @@
                 </div>
                 <div class="search-option">
                     <input type="radio" id="searchChirps" name="searchType" value="chirps" <#if searchType == "chirps">checked</#if>>
-                    <label for="searchChirps">💬 Chirps</label>
+                    <label for="searchChirps">Chirps</label>
                 </div>
             </div>
             
-            <button type="submit" class="search-btn">🔍 Search</button>
+            <button type="submit" class="search-btn">Search</button>
         </form>
 
         <div class="suggestions-section">
-            <h3>💡 Suggestions</h3>
+            <h3>Suggestions</h3>
             <div class="suggestions-grid">
                 <#if popularHashtags?? && popularHashtags?size gt 0>
                     <div class="suggestion-card">
-                        <h4>📈 Trending Hashtags</h4>
+                        <h4>Trending Hashtags</h4>
                         <ul class="suggestion-list">
                             <#list popularHashtags as hashtag>
                                 <li>
@@ -269,7 +269,7 @@
 
                 <#if allUsers?? && allUsers?size gt 0>
                     <div class="suggestion-card">
-                        <h4>👥 Users to Discover</h4>
+                        <h4>Users to Discover</h4>
                         <ul class="suggestion-list">
                             <#list allUsers as username>
                                 <#if username_index lt 8>
@@ -290,7 +290,7 @@
         </div>
 
         <div class="search-tips">
-            <h4>🎯 Search Tips</h4>
+            <h4>Search Tips</h4>
             <ul>
                 <li><strong>Users:</strong> Search by username (e.g., "john" or "@john")</li>
                 <li><strong>Hashtags:</strong> Search with or without # (e.g., "Georgetown" or "#Georgetown")</li>

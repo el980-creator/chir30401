@@ -51,11 +51,11 @@
     
     <div class="user-list">
         <div class="stats">
-            <h3>📊 User Statistics</h3>
+            <h3>User Statistics</h3>
             <p><strong>${usernames?size}</strong> registered users in Chirpy</p>
         </div>
         
-        <h2>👥 All Registered Users</h2>
+        <h2>All Registered Users</h2>
         <#if usernames?? && usernames?size gt 0>
             <#list usernames as username>
                 <div class="user-item">

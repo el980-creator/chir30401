@@ -159,11 +159,12 @@ public class SearchResultsHandler implements HttpHandler {
         displayLogic.parseTemplate(SEARCH_RESULTS_PAGE, dataModel, sw);
         
         // Send response
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, sw.getBuffer().length());
+        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+        byte[] responseBytes = sw.toString().getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, responseBytes.length);
         
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(sw.toString().getBytes());
+            os.write(responseBytes);
         }
     }
 

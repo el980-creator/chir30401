@@ -33,6 +33,8 @@ public class DisplayLogic {
         cfg.setDirectoryForTemplateLoading(new File("resources/templates"));
         // Recommended settings for new projects:
         cfg.setDefaultEncoding("UTF-8");
+        cfg.setOutputEncoding("UTF-8");
+        cfg.setURLEscapingCharset("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         cfg.setLogTemplateExceptions(false);
         cfg.setWrapUncheckedExceptions(true);

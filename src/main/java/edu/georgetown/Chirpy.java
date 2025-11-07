@@ -16,6 +16,9 @@ import edu.georgetown.dl.LogoutHandler;
 import edu.georgetown.dl.PostChirpHandler;
 import edu.georgetown.dl.SearchHandler;
 import edu.georgetown.dl.SearchResultsHandler;
+import edu.georgetown.dl.RegisterHandler;
+import edu.georgetown.dl.LoginHandler;
+import edu.georgetown.dl.ListUsersHandler;
 import edu.georgetown.dl.TestFormHandler;
 import edu.georgetown.dl.TimelineHandler;
 import java.io.IOException;
@@ -88,9 +91,9 @@ public class Chirpy {
             server.createContext("/timeline/", new TimelineHandler(logger, userService, chirpService, displayLogic));
             server.createContext("/search/", new SearchHandler(logger, userService, chirpService, displayLogic));
             server.createContext("/searchresults/", new SearchResultsHandler(logger, userService, chirpService, displayLogic));
-            server.createContext("/listusers/", new edu.georgetown.dl.ListUsersHandler(logger, userService, displayLogic));
-            server.createContext("/register/", new edu.georgetown.dl.RegisterHandler(logger, userService, displayLogic));
-            server.createContext("/login/", new edu.georgetown.dl.LoginHandler(logger, userService, displayLogic));
+            server.createContext("/listusers/", new ListUsersHandler(logger, userService, displayLogic));
+            server.createContext("/register/", new RegisterHandler(logger, userService, displayLogic));
+            server.createContext("/login/", new LoginHandler(logger, userService, displayLogic));
             server.createContext("/", new DefaultPageHandler(logger, displayLogic));
             // you will need to add to the above list to add new functionality to the web
             // service.  Just make sure that the handler for "/" is listed last.
