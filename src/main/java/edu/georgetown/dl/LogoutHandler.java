@@ -1,7 +1,7 @@
 /**
  * LogoutHandler - handles user logout functionality
  * 
- * @author Chirpy Team
+ * @author Group 7 - Estheffy De Jesus, Alex Freund, Brian Lee, Fahad Shahbaz
  */
 
 package edu.georgetown.dl;

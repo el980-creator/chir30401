@@ -1,7 +1,7 @@
 /**
  * ChirpService - Business Logic Layer for managing chirps
  * 
- * @author Chirpy Team
+ * @author Group 7 - Estheffy De Jesus, Alex Freund, Brian Lee, Fahad Shahbaz
  */
 
 package edu.georgetown.bll;

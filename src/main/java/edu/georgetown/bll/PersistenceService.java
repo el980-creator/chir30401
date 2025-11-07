@@ -1,7 +1,7 @@
 /**
  * PersistenceService - handles JSON file persistence for users and chirps
  * 
- * @author Chirpy Team
+ * @author Group 7 - Estheffy De Jesus, Alex Freund, Brian Lee, Fahad Shahbaz
  */
 
 package edu.georgetown.bll;

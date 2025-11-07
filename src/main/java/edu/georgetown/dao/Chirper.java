@@ -5,7 +5,7 @@
  * privacy settings, and social relationships (followers and following).
  * Supports user authentication, following relationships, and profile management.
  * 
- * @author Chirpy Team
+ * @author Group 7 - Estheffy De Jesus, Alex Freund, Brian Lee, Fahad Shahbaz
  * @version 2.0
  * @since 1.0
  */
@@ -29,7 +29,7 @@ import java.util.Vector;
  * <p>The class implements {@link Serializable} to support persistence
  * and session management capabilities.
  * 
- * @author Chirpy Team
+ * @author Group 7 - Estheffy De Jesus, Alex Freund, Brian Lee, Fahad Shahbaz
  * @version 2.0
  */
 public class Chirper implements Serializable {
